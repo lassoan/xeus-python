@@ -35,4 +35,11 @@
     #define XEUS_PYTHON_API
 #endif
 
+#ifdef XEUS_PYTHON_EMBEDDED
+    #define XEUS_PYBIND_MODULE PYBIND11_EMBEDDED_MODULE
+#else
+    #define XEUS_PYBIND_MODULE PYBIND11_MODULE
+#endif
+
+
 #endif

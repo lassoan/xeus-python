@@ -15,6 +15,8 @@
 #include "pybind11/functional.h"
 #include "pybind11/pybind11.h"
 
+#include "xeus-python/xeus_python_config.hpp"
+
 #include "xstream.hpp"
 
 namespace py = pybind11;
@@ -35,7 +37,7 @@ namespace xpyt
         xeus::get_interpreter().publish_stream(m_stream_name, message);
     }
 
-    PYBIND11_EMBEDDED_MODULE(xeus_python_stream, m)
+    XEUS_PYBIND_MODULE(xeus_python_stream, m)
     {
         py::class_<xstream>(m, "XPythonStream")
             .def(py::init<std::string>())

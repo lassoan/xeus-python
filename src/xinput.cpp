@@ -17,6 +17,8 @@
 #include "pybind11/functional.h"
 #include "pybind11/pybind11.h"
 
+#include "xeus-python/xeus_python_config.hpp"
+
 #include "xinput.hpp"
 #include "xutils.hpp"
 
@@ -40,7 +42,7 @@ namespace xpyt
         throw std::runtime_error("This frontend does not support input requests");
     }
 
-    PYBIND11_EMBEDDED_MODULE(xeus_python_input, m)
+    XEUS_PYBIND_MODULE(xeus_python_input, m)
     {
         m.def("input", input, py::arg("prompt") = "")
          .def("getpass", getpass, py::arg("prompt") = "")

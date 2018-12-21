@@ -13,6 +13,8 @@ project(xeus-python)
 set(XEUSPYTHON_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(XEUSPYTHON_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
+OPTION(XEUS_PYTHON_EMBEDDED "Embedded Python interpreter" ON)
+
 # Versionning
 # ===========
 
@@ -142,7 +144,12 @@ target_include_directories(xeus-python
                                ${PYTHON_INCLUDE_DIRS}
                                $<BUILD_INTERFACE:${XEUSPYTHON_INCLUDE_DIR}>
                                $<INSTALL_INTERFACE:include>)
-target_link_libraries(xeus-python PUBLIC pybind11::embed xeus)
+if (XEUS_PYTHON_EMBEDDED)
+  add_definitions(-DXEUS_PYTHON_EMBEDDED)
+  target_link_libraries(xeus-python PUBLIC pybind11::embed xeus)
+else()
+  target_link_libraries(xeus-python PUBLIC pybind11::module xeus)
+endif()
 
 set_target_properties(xeus-python PROPERTIES
                       PUBLIC_HEADER "${XEUSPYTHON_HEADERS}"
@@ -151,6 +158,48 @@ set_target_properties(xeus-python PROPERTIES
                       VERSION ${${PROJECT_NAME}_VERSION}
                       SOVERSION ${XPYT_VERSION_MAJOR}
                       OUTPUT_NAME "libxeus-python")
+
+if (NOT XEUS_PYTHON_EMBEDDED)
+  pybind11_add_module(xeus_python_stream src/xstream.cpp)
+  target_link_libraries(xeus_python_stream PUBLIC xeus)
+  target_include_directories(xeus_python_stream
+                           PUBLIC
+                               ${PYTHON_INCLUDE_DIRS}
+                               $<BUILD_INTERFACE:${XEUSPYTHON_INCLUDE_DIR}>
+                               $<INSTALL_INTERFACE:include>)
+
+  pybind11_add_module(xeus_python_kernel src/xcomm.cpp src/xutils.cpp)
+  target_link_libraries(xeus_python_kernel PUBLIC xeus)
+  target_include_directories(xeus_python_kernel
+                           PUBLIC
+                               ${PYTHON_INCLUDE_DIRS}
+                               $<BUILD_INTERFACE:${XEUSPYTHON_INCLUDE_DIR}>
+                               $<INSTALL_INTERFACE:include>)
+
+  pybind11_add_module(xeus_python_display src/xdisplay.cpp src/xutils.cpp)
+  target_link_libraries(xeus_python_display PUBLIC xeus)
+  target_include_directories(xeus_python_display
+                           PUBLIC
+                               ${PYTHON_INCLUDE_DIRS}
+                               $<BUILD_INTERFACE:${XEUSPYTHON_INCLUDE_DIR}>
+                               $<INSTALL_INTERFACE:include>)
+
+  pybind11_add_module(xeus_python_input src/xinput.cpp)
+  target_link_libraries(xeus_python_input PUBLIC xeus)
+  target_include_directories(xeus_python_input
+                           PUBLIC
+                               ${PYTHON_INCLUDE_DIRS}
+                               $<BUILD_INTERFACE:${XEUSPYTHON_INCLUDE_DIR}>
+                               $<INSTALL_INTERFACE:include>)
+
+  pybind11_add_module(xeus_python_is_complete src/xis_complete.cpp)
+  target_link_libraries(xeus_python_is_complete PUBLIC xeus)
+  target_include_directories(xeus_python_is_complete
+                           PUBLIC
+                               ${PYTHON_INCLUDE_DIRS}
+                               $<BUILD_INTERFACE:${XEUSPYTHON_INCLUDE_DIR}>
+                               $<INSTALL_INTERFACE:include>)
+endif()
 
 #########
 # Tests #

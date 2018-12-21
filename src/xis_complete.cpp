@@ -10,6 +10,8 @@
 #include "pybind11/pybind11.h"
 #include "pybind11/embed.h"
 
+#include "xeus-python/xeus_python_config.hpp"
+
 #include "xutils.hpp"
 
 namespace py = pybind11;
@@ -17,7 +19,7 @@ namespace py = pybind11;
 namespace xpyt
 {
 
-    PYBIND11_EMBEDDED_MODULE(xeus_python_is_complete, m)
+    XEUS_PYBIND_MODULE(xeus_python_is_complete, m)
     {
         py::module builtins = py::module::import(XPYT_BUILTINS);
         builtins.attr("exec")(R"(

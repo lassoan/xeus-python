@@ -16,6 +16,8 @@
 #include "pybind11/embed.h"
 #include "pybind11/pybind11.h"
 
+#include "xeus-python/xeus_python_config.hpp"
+
 #include "xdisplay.hpp"
 #include "xutils.hpp"
 
@@ -162,7 +164,7 @@ namespace xpyt
      * Python module *
      ***************************/
 
-    PYBIND11_EMBEDDED_MODULE(xeus_python_display, m)
+    XEUS_PYBIND_MODULE(xeus_python_display, m)
     {
         py::class_<xdisplayhook>(m, "XPythonDisplay")
             .def(py::init<>())

@@ -44,10 +44,17 @@ namespace xpyt
     interpreter::interpreter(int /*argc*/, const char* const* /*argv*/)
     {
         xeus::register_interpreter(this);
+
+#ifdef XEUS_PYTHON_EMBEDDED
+
+        // For some reason, this crashes in non-embedded mode
         redirect_output();
+
         redirect_display();
 
         py::module sys = py::module::import("sys");
+
+        // Complains that it got unicode instead of str in non-embedded mode
         py::module types = py::module::import("types");
         py::module xeus_python_kernel = py::module::import("xeus_python_kernel");
         py::module xeus_python_display = py::module::import("xeus_python_display");
@@ -69,6 +76,8 @@ namespace xpyt
         py::module ipython = types.attr("ModuleType")("get_kernel");
         ipython.attr("get_ipython") = xeus_python_kernel.attr("get_kernel");
         sys.attr("modules")["IPython.core.getipython"] = ipython;
+#endif
+
     }
 
     interpreter::~interpreter()

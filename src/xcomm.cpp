@@ -18,6 +18,8 @@
 #include "pybind11/embed.h"
 #include "pybind11/pybind11.h"
 
+#include "xeus-python/xeus_python_config.hpp"
+
 #include "xcomm.hpp"
 #include "xutils.hpp"
 
@@ -135,7 +137,7 @@ namespace xpyt
         };
     }
 
-    PYBIND11_EMBEDDED_MODULE(xeus_python_kernel, m)
+    XEUS_PYBIND_MODULE(xeus_python_kernel, m)
     {
         py::class_<detail::xmock_object> _Mock(m, "_Mock");
 
